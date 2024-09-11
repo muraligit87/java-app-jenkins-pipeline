@@ -38,6 +38,8 @@ pipeline {
         }
         stage('Deployment with new WAR file ') {
             steps {
+                echo 'UnDeploying war file'
+                undeploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084')], contextPath: '/opt/tomcat-app1/webapps', war: '**/*.war'
                 echo 'Deploying war file'
                 deploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084')], contextPath: '/opt/tomcat-app1/webapps', war: '**/*.war'
                
