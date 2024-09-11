@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools {
+    maven 'maven_home'
+    jdk 'java_home'
+    }
 
     stages {
         stage('Git Checkout') {
@@ -11,6 +15,7 @@ pipeline {
         stage('Maven build') {
             steps {
                 echo 'I am at Maven build stage'
+                sh "mvn clean compile package"
                 
             }
         }
