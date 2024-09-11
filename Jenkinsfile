@@ -41,6 +41,7 @@ pipeline {
             steps {
                 echo 'Deploying war file'
                 deploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084/')], contextPath: null, war: '**/*.war'
+                sh "cd ${CATALINA_HOME}/webapps"
                 sh "mv *SNAPSHOT.war ${APP_NAME}"
             }
         }
