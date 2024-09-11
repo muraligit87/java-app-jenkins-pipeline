@@ -40,7 +40,7 @@ pipeline {
             steps {
                 echo 'Deploying war file'
                 deploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084')], contextPath: '/opt/tomcat-app1/webapps', war: '**/*.war'
-                #sh "mv *SNAPSHOT.war ${APP_NAME}"
+               
             }
         }
             stage('Start Tomcat') {
