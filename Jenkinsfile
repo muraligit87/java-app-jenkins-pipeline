@@ -11,7 +11,7 @@ pipeline {
         stage('Maven build') {
             steps {
                 echo 'I am at Maven build stage'
-                mvn clean compile package
+                
             }
         }
         stage('Deploy') {
