@@ -34,7 +34,7 @@ pipeline {
             steps {
                 echo 'I am at WAR file backup stage'
                 sh "${CATALINA_HOME}/webapps/WAR-backup.sh"
-                sh "rm -rf ${CATALINA_HOME}/webapps/${APP_NAME}"
+                
             }
         }
         stage('Deployment with new WAR file ') {
