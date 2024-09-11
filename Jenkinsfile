@@ -17,7 +17,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying war file'
-                cp *SNAPSHOT.war /opt/tomcat-app1/webapps
             }
         }
     }
