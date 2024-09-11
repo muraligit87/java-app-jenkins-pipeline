@@ -54,6 +54,7 @@ pipeline {
          stage('Application Deployment completed') {
             steps {
                 echo 'Application Deployment completed'
+                cleanWs()
             }
           }
         }
