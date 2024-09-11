@@ -4,6 +4,10 @@ pipeline {
     maven 'maven_home'
     jdk 'java_home'
     }
+    environment {
+    CATALINA_HOME = "/opt/tomcat-app1/"
+    APP_NAME = "Stateful-Tracker.war"
+    }
 
     stages {
         stage('Git Checkout') {
@@ -16,13 +20,40 @@ pipeline {
             steps {
                 echo 'I am at Maven build stage'
                 sh "mvn clean compile package"
-                
+                archiveArtifacts artifacts: '**/*.war', followSymlinks: false
             }
         }
-        stage('Deploy') {
+        stage('Stop Tomcat') {
+            steps {
+                echo 'Stop the Tomcat server'
+                sh "/opt/tomcat-app1/bin/shutdown.sh"
+                sh "sleep 20"
+            }
+        }
+        stage('Backup of WAR file') {
+            steps {
+                echo 'I am at WAR file backup stage'
+                sh "${CATALINA_HOME}/webapps/WAR-backup.sh"
+            }
+        }
+        stage('Deployment with new WAR file ') {
             steps {
                 echo 'Deploying war file'
+                deploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084')], contextPath: '/opt/tomcat-app1/webapps', war: '**/*.war'
+                sh "mv *SNAPSHOT.war ${APP_NAME}"
             }
+            stage('Start Tomcat') {
+            steps {
+                echo 'Start the Tomcat server'
+                sh "/opt/tomcat-app1/bin/startup.sh"
+                sh "sleep 20"
+            }
+        }
+         stage('Application Deployment completed') {
+            steps {
+                echo 'Application Deployment completed'
+            }
+          }
         }
     }
 }
