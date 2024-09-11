@@ -34,15 +34,14 @@ pipeline {
             steps {
                 echo 'I am at WAR file backup stage'
                 sh "${CATALINA_HOME}/webapps/WAR-backup.sh"
+                sh "rm -rf ${CATALINA_HOME}/webapps/${APP_NAME}"
             }
         }
         stage('Deployment with new WAR file ') {
             steps {
-                echo 'UnDeploying war file'
-                undeploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084')], contextPath: '/opt/tomcat-app1/webapps', war: '**/*.war'
                 echo 'Deploying war file'
                 deploy adapters: [tomcat8(credentialsId: 'tomcat-login', path: '', url: 'http://localhost:8084')], contextPath: '/opt/tomcat-app1/webapps', war: '**/*.war'
-               
+                sh "mv *SNAPSHOT.war ${APP_NAME}"
             }
         }
             stage('Start Tomcat') {
